@@ -1,0 +1,11 @@
+{
+  "name": "js-anti-spam-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "andrei@iamprofessional.dev",
+  "license": "ISC"
+}
