@@ -1,7 +1,8 @@
 const express = require("express");
-const constants = require("./constants");
-
 const TelegramBot = require('node-telegram-bot-api');
+
+const constants = require("./constants");
+const callbacks = require("./filtration_callbacks");
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = constants.TELEGRAM_TOKEN;
@@ -22,14 +23,8 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
     bot.sendMessage(chatId, resp);
 });
 
-// Listen for any kind of message. There are different kinds of
-// messages.
-bot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-
-    // send a message to the chat acknowledging receipt of their message
-    bot.sendMessage(chatId, 'Is it work? Received your message');
-});
+// Listen for any kind of message. There are different kinds of messages.
+bot.on('message', (msg) => callbacks.onMessageReaction(bot, msg));
 
 const app = express();
 app.get("/webhook",function(request,response){
