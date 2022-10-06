@@ -91,13 +91,13 @@ function getChatUsersPatterns(rawBotId, rawChatId) {
 
 
 function setChatUsersPatterns(rawBotId, rawChatId, pattern) {
-    const timestamp = (new Date().getTime() / 1000).toString();
+    const timestamp = (new Date().getTime() / 1000).toString().split('.')[0];
     const botId = rawBotId.toString();
     const chatId = rawChatId.toString();
 
     return getChatInfo(botId, chatId).then((chatInfo) => {
        chatInfo[BLOCK_USERS_PATTERNS_KEY][timestamp] = pattern;
-       return setChatInfo(chatInfo);
+       return setChatInfo(botId, chatId, chatInfo);
     });
 }
 
@@ -111,7 +111,7 @@ function delChatUsersPatterns(rawBotId, rawChatId, pattern) {
         const shouldRemoveTimestamps = [];
         timestamps.forEach((ts) => {
             if (chatInfo[BLOCK_USERS_PATTERNS_KEY][ts] === pattern) {
-                shouldRemoveTimestamps.push([ts]);
+                shouldRemoveTimestamps.push(ts);
             }
         });
         shouldRemoveTimestamps.forEach((ts) => {

@@ -1,18 +1,6 @@
 const dbUtils = require('./firebase_utils');
 
 
-function onMessageReaction (bot, msg) {
-    const chatId = msg.chat.id;
-    const text = msg.text || '';
-    const userFrom = msg.from.id;
-
-    bot.getMe().then((botTgData) => {
-        const botId = botTgData.id;
-        checkNewMembers(bot, botId, msg, chatId);
-        calculateMessages(bot, botId, msg, chatId);
-    })
-}
-
 function checkNewMembers(bot, botId, msg, chatId) {
     const newMembersArray = msg.new_chat_members || Array();
     newMembersArray.forEach((member) => {
@@ -103,5 +91,6 @@ function calculateMessages(bot, botId, msg, chatId) {
 }
 
 module.exports = {
-    onMessageReaction
+    calculateMessages,
+    checkNewMembers
 }
