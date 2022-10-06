@@ -20,14 +20,18 @@ bot.on('message', (msg) => {
     bot.getMe().then((botTgData) => {
         const botId = botTgData.id;
         const botUsername = botTgData.username;
-        console.log(botTgData);
 
         const probablyCommand = text.split(' ')[0].split('@')[0];
         if (
             commands.COMMANDS_BY_NAME[probablyCommand] ||
             commands.COMMANDS_BY_NAME[probablyCommand + '@' + botUsername]
         ) {
-            commands.COMMANDS_BY_NAME[probablyCommand](bot, botId, msg, chatId);
+            bot.getChatMember(chatId, userFrom).then(function(data) {
+
+                if (['creator', 'administrator'].includes(data.status)) {
+                    commands.COMMANDS_BY_NAME[probablyCommand](bot, botId, msg, chatId);
+                }
+            });
         } else {
             callbacks.checkNewMembers(bot, botId, msg, chatId);
             callbacks.calculateMessages(bot, botId, msg, chatId);
