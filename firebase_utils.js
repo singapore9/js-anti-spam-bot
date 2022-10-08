@@ -66,6 +66,9 @@ function setChatLimits(rawBotId, rawChatId, phrase, count) {
     const chatId = rawChatId.toString();
 
     return getChatInfo(botId, chatId).then((chatInfo) => {
+        if (chatInfo[GREYLIST_KEY] === undefined) {
+            chatInfo[GREYLIST_KEY] = {};
+        }
         chatInfo[GREYLIST_KEY][phrase] = count;
         return setChatInfo(botId, chatId, chatInfo);
     });
@@ -76,7 +79,9 @@ function delChatLimits(rawBotId, rawChatId, phrase) {
     const botId = rawBotId.toString();
     const chatId = rawChatId.toString();
     return getChatInfo(botId, chatId).then((chatInfo) => {
-        delete chatInfo[GREYLIST_KEY][phrase];
+        if (chatInfo[GREYLIST_KEY] !== undefined) {
+            delete chatInfo[GREYLIST_KEY][phrase];
+        }
         return setChatInfo(botId, chatId, chatInfo);
     });
 }
@@ -96,8 +101,11 @@ function setChatUsersPatterns(rawBotId, rawChatId, pattern) {
     const chatId = rawChatId.toString();
 
     return getChatInfo(botId, chatId).then((chatInfo) => {
-       chatInfo[BLOCK_USERS_PATTERNS_KEY][timestamp] = pattern;
-       return setChatInfo(botId, chatId, chatInfo);
+        if (chatInfo[BLOCK_USERS_PATTERNS_KEY] === undefined) {
+            chatInfo[BLOCK_USERS_PATTERNS_KEY] = {};
+        }
+        chatInfo[BLOCK_USERS_PATTERNS_KEY][timestamp] = pattern;
+        return setChatInfo(botId, chatId, chatInfo);
     });
 }
 
